@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title -%}GetOut &mdash; Edit profile{%- endblock %}
+
+{% block content %}
+
+<div class="container signup">
+    <form action="{{ url_for('.edit_profile') }}" method="POST">
+        <input type="text" name="name" placeholder="Name">
+        <input type="text" name="location" placeholder="Location (e.g. Brooklyn, NY)">
+        <input type="text" name="bio" placeholder="Bio">
+        <input type="submit" value="Save profile">
+    </form>
+</div>
+
+{% endblock %}

@@ -8,12 +8,22 @@
 
 <title>{% block title %}{% endblock %}</title>
 
-<link rel="stylesheet" href="{{ url_for('.static', filename='css/normalize.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/go.css') }}">
 
 </head>
 <body>
 
+<div class="header">
+    <div class="container">
+        <h1>GetOut</h1>
+        <h2>A game layer on the world</h2>
+    </div>
+</div>
+
 {% block content %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
 
 </body>
 </html>
