@@ -1,0 +1,5 @@
+Hey {{ user.username }},
+
+Click <a href="{{ url_for('auth.confirm', username=user.username,
+code=user.confirmation_code, _external=True) }}">here</a> to confirm your email
+address.

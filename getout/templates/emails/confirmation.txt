@@ -1,0 +1,5 @@
+Hey {{ user.username }},
+
+Click on the following link to confirm your email address:
+
+{{ url_for("auth.confirm", username=user.username, code=user.confirmation_code, _external=True) }}

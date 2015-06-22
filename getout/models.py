@@ -2,58 +2,74 @@
 
 from __future__ import division, print_function
 
-__all__ = ["Role", "User", "Place", "Visit"]
+__all__ = ["db", "login_manager", "User", "Location", "Visit"]
 
 from flask.ext import login
 from flask.ext.sqlalchemy import SQLAlchemy
 
+from werkzeug.security import (generate_password_hash, check_password_hash,
+                               gen_salt)
+
 db = SQLAlchemy()
+login_manager = login.LoginManager()
+login_manager.login_view = "auth.login"
 
 
-roles_users = db.Table(
-    "roles_users",
-    db.Column("user_id", db.Integer(), db.ForeignKey("users.id")),
-    db.Column("role_id", db.Integer(), db.ForeignKey("roles.id"))
-)
-
-
-class Role(db.Model, security.RoleMixin):
-
-    __tablename__ = "roles"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
-
-class User(db.Model, security.UserMixin):
+class User(db.Model, login.UserMixin):
 
     __tablename__ = "users"
 
-    # Security columns.
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.Text, unique=True)
-    email = db.Column(db.Text, unique=True)
-    password = db.Column(db.String(255))
-    active = db.Column(db.Boolean)
-    confirmed_at = db.Column(db.DateTime)
-    last_login_at = db.Column(db.DateTime)
-    current_login_at = db.Column(db.DateTime)
-    last_login_ip = db.Column(db.Text)
-    current_login_ip = db.Column(db.Text)
-    login_count = db.Column(db.Integer)
-    roles = db.relationship("Role", secondary=roles_users,
-                            backref=db.backref("users", lazy="dynamic"))
+    username = db.Column(db.String(255), unique=True, nullable=False)
 
-    # Other columns.
-    fullname = db.Column(db.Text)
+    # Hashed password and username.
+    password = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+
+    # Account creation.
+    confirmation_code = db.Column(db.String(12))
+    confirmation_expiry = db.Column(db.DateTime)
+    confirmed = db.Column(db.Boolean, default=False)
+
+    # Password reset.
+    reset_code = db.Column(db.String(64))
+    reset_expiry = db.Column(db.DateTime)
+
+    # User information.
+    given_name = db.Column(db.Text)
+    family_name = db.Column(db.Text)
+    picture = db.Column(db.Text)
     bio = db.Column(db.Text)
-    avatarurl = db.Column(db.Text)
+    location = db.Column(db.Text)
+
+    # Stats.
+    last_login_at = db.Column(db.DateTime)
+    last_login_ip = db.Column(db.Text)
+    login_count = db.Column(db.Integer, default=0)
+
+    def __init__(self, username, email, password):
+        self.username = username
+        self.set_email(email)
+        self.set_password(password)
+
+        self.confirmation_code = gen_salt(12)
+
+    def set_email(self, em):
+        self.email = generate_password_hash(em)
+
+    def check_email(self, em):
+        return check_password_hash(self.email, em)
+
+    def set_password(self, pw):
+        self.password = generate_password_hash(pw)
+
+    def check_password(self, pw):
+        return check_password_hash(self.password, pw)
 
 
-class Place(db.Model):
+class Space(db.Model):
 
-    __tablename__ = "places"
+    __tablename__ = "spaces"
 
     id = db.Column(db.Integer, primary_key=True)
     uniquename = db.Column(db.Text, unique=True)
@@ -69,10 +85,6 @@ class Visit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship(User, backref=db.backref("visits", lazy="dynamic"))
-    place_id = db.Column(db.Integer, db.ForeignKey("places.id"))
-    place = db.relationship(Place,
-                            backref=db.backref("visits", lazy="dynamic"))
-
-
-user_datastore = security.SQLAlchemyUserDatastore(db, User, Role)
-security_ext = security.Security(datastore=user_datastore)
+    space_id = db.Column(db.Integer, db.ForeignKey("spaces.id"))
+    space = db.relationship(Space, backref=db.backref("visits",
+                                                      lazy="dynamic"))

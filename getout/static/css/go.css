@@ -22,20 +22,16 @@ a:hover {
     margin: 0 auto;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+input {
     display: block;
     width: 478px;
     padding: 10px;
-    margin: 10px 0;
+    margin: 10px 0 0;
     border: 1px solid #ddd;
     outline: none;
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
+input:focus {
     border: 1px solid #888;
 }
 
@@ -44,24 +40,22 @@ input[type="submit"] {
     color: #fff;
     font-weight: bold;
     border: 1px solid #b43d32;
-    display: block;
-    width: 500px;
-    padding: 10px;
-    margin: 10px 0;
+    box-sizing: content-box;
 }
 
 .header {
     border-top: 10px solid #b43d32;
+    padding: 0 0 50px;
 }
 
-.header h1 {
+.logo h1 {
     font-size: 28pt;
     text-align: center;
     margin: 50px 0 0;
     padding: 0;
 }
 
-.header h2 {
+.logo h2 {
     font-size: 14pt;
     text-align: center;
     font-weight: normal;
@@ -70,19 +64,61 @@ input[type="submit"] {
     padding: 0;
 }
 
-.signup {
-    width: 500px;
-    padding: 50px 0;
-}
-
-.signup form {
-    margin: 0;
-    padding: 0 0 25px;
-}
-
 .signup p {
     font-size: 12pt;
     text-align: center;
     margin: 0;
     padding: 10px 0 0;
+}
+
+.form-error {
+    display: block;
+    color: #b43d32;
+    font-size: 12pt;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+#map-canvas {
+    height: 200px;
+    width: 498px;
+    border: 1px solid #222;
+}
+
+@media screen and (max-width: 500px) {
+    .container {
+        width: 100%;
+        margin: 0;
+    }
+
+    .header {
+        display: none;
+    }
+
+    #map-canvas {
+        height: 260px;
+        width: 100%;
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    form {
+        margin: 0 33px 0 10px;
+    }
+
+    input {
+        width: 100%;
+    }
+}
+
+.tt-menu {
+    position: relative !important;
+    width: 100%;
+}
+
+.tt-suggestion {
+    padding: 2px 10px;
+    border: 1px solid none;
 }

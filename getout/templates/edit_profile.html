@@ -6,9 +6,10 @@
 
 <div class="container signup">
     <form action="{{ url_for('.edit_profile') }}" method="POST">
-        <input type="text" name="name" placeholder="Name">
-        <input type="text" name="location" placeholder="Location (e.g. Brooklyn, NY)">
-        <input type="text" name="bio" placeholder="Bio">
+        <input type="text" name="given_name" placeholder="First name" value="{{ current_user.given_name }}">
+        <input type="text" name="family_name" placeholder="Last name"{%- if current_user.family_name -%} value="{{ current_user.family_name }}"{%- endif -%}>
+        <input type="text" name="location" placeholder="Location (e.g. Brooklyn, NY)"{%- if current_user.location -%} value="{{ current_user.location }}"{%- endif -%}>
+        <input type="text" name="bio" placeholder="Bio"{%- if current_user.bio -%} value="{{ current_user.bio }}"{%- endif -%}>
         <input type="submit" value="Save profile">
     </form>
 </div>
