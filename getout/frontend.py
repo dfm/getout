@@ -7,7 +7,8 @@ __all__ = ["frontend"]
 import flask
 from flask.ext.login import current_user, login_required
 
-from .forms import SignupForm
+from .models import db
+from .forms import SignupForm, ProfileForm
 
 frontend = flask.Blueprint("frontend", __name__, template_folder="templates")
 
@@ -15,7 +16,7 @@ frontend = flask.Blueprint("frontend", __name__, template_folder="templates")
 @frontend.route("/")
 def index():
     if current_user.is_authenticated():
-        return "Hi."
+        return flask.render_template("index.html")
     form = SignupForm()
     return flask.render_template("signup.html", form=form)
 
@@ -28,4 +29,9 @@ def new_visit():
 @frontend.route("/profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
-    return flask.render_template("edit_profile.html")
+    form = ProfileForm(obj=current_user)
+    if form.validate_on_submit():
+        form.populate_obj(current_user)
+        db.session.commit()
+        flask.flash("Profile changes saved.")
+    return flask.render_template("edit_profile.html", form=form)

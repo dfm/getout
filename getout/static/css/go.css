@@ -22,16 +22,46 @@ a:hover {
     margin: 0 auto;
 }
 
-input {
+.flashes {
+    padding: 10px 0;
+    background: #444;
+    color: #fff;
+    font-size: 12pt;
+}
+
+.flashes .container {
+    text-align: center;
+}
+
+.form-title {
+    font-weight: bold;
+    text-align: center;
+    font-size: 16pt;
+}
+
+label {
+    display: block;
+    width: 478px;
+    margin: 15px 0;
+    font-size: 12pt;
+}
+
+input[type="submit"],
+input[type="text"],
+input[type="email"],
+input[type="password"] {
     display: block;
     width: 478px;
     padding: 10px;
-    margin: 10px 0 0;
+    margin: 5px 0 0;
     border: 1px solid #ddd;
     outline: none;
+    font-size: 14pt;
 }
 
-input:focus {
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
     border: 1px solid #888;
 }
 
@@ -41,6 +71,10 @@ input[type="submit"] {
     font-weight: bold;
     border: 1px solid #b43d32;
     box-sizing: content-box;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
 }
 
 .header {
@@ -82,8 +116,8 @@ input[type="submit"] {
 
 #map-canvas {
     height: 200px;
-    width: 498px;
-    border: 1px solid #222;
+    width: 100%;
+    border-bottom: 1px solid #222;
 }
 
 @media screen and (max-width: 500px) {

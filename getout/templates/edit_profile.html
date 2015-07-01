@@ -5,11 +5,43 @@
 {% block content %}
 
 <div class="container signup">
+    <div class="form-title">
+        Edit Profile
+    </div>
+
+    {% if errors or form.errors %}
+        <span class="form-error"><strong>Errors:</strong></span>
+        {% if errors %}
+            {% for error in errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+            {% for error in field_errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
     <form action="{{ url_for('.edit_profile') }}" method="POST">
-        <input type="text" name="given_name" placeholder="First name" value="{{ current_user.given_name }}">
-        <input type="text" name="family_name" placeholder="Last name"{%- if current_user.family_name -%} value="{{ current_user.family_name }}"{%- endif -%}>
-        <input type="text" name="location" placeholder="Location (e.g. Brooklyn, NY)"{%- if current_user.location -%} value="{{ current_user.location }}"{%- endif -%}>
-        <input type="text" name="bio" placeholder="Bio"{%- if current_user.bio -%} value="{{ current_user.bio }}"{%- endif -%}>
+        {{ form.hidden_tag() }}
+        <label>
+        First name
+        {{ form.given_name() }}
+        </label>
+        <label>
+        Last name
+        {{ form.family_name() }}
+        </label>
+        <label>
+        Location
+        {{ form.location(placeholder="e.g. Brooklyn") }}
+        </label>
+        <label>
+        Bio
+        {{ form.bio() }}
+        </label>
+
         <input type="submit" value="Save profile">
     </form>
 </div>

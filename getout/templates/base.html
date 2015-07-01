@@ -14,7 +14,17 @@
 </head>
 <body>
 
-<div class="header">{% block header %}{% endblock %}</div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+<div class="flashes">
+    <div class="container">
+        {{ messages[-1] }}
+    </div>
+</div>
+    {% endif %}
+{% endwith %}
+
+{% block header %}<div class="header"></div>{% endblock %}
 
 {% block content %}{% endblock %}
 
